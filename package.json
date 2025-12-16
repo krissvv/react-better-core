@@ -1,0 +1,49 @@
+{
+   "name": "react-better-core",
+   "version": "1.0.0",
+   "description": "The Core library that provides the foundational utilities and abstractions for other libraries in the ecosystem",
+   "main": "dist/index.js",
+   "triggerDeployment": 3,
+   "files": [
+      "dist"
+   ],
+   "exports": {
+      ".": {
+         "types": "./dist/index.d.ts",
+         "default": "./dist/index.js"
+      }
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/krissvv/react-better-core.git"
+   },
+   "homepage": "https://krissvv.github.io/react-better-core",
+   "bugs": {
+      "url": "https://github.com/krissvv/react-better-core/issues"
+   },
+   "scripts": {
+      "clean": "rimraf dist",
+      "prebuild": "npm run clean",
+      "build": "tsup",
+      "predeploy": "npm run build",
+      "deploy": "npm publish"
+   },
+   "keywords": [
+      "react",
+      "better",
+      "easy",
+      "core",
+      "utilities"
+   ],
+   "author": "Kristiyan Valchev (krissvv)",
+   "license": "MIT",
+   "devDependencies": {
+      "@types/react": "^19.0.10",
+      "rimraf": "^6.0.1",
+      "tsup": "^8.5.0",
+      "typescript": "^5.5.3"
+   },
+   "peerDependencies": {
+      "react": "^19.0.0"
+   }
+}
