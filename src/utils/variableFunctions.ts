@@ -3,7 +3,7 @@ import { LoaderName } from "../types/loader";
 
 import { BetterCoreInternalConfig, externalBetterCoreContextValue } from "../components/BetterCoreProvider";
 
-export const checkBetterCoreContextValue = (
+const checkBetterCoreContextValue = (
    value: BetterCoreInternalConfig | undefined,
    functionsName: string,
 ): value is BetterCoreInternalConfig => {
