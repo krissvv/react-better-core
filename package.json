@@ -1,6 +1,6 @@
 {
    "name": "react-better-core",
-   "version": "1.0.2",
+   "version": "1.0.3",
    "description": "The Core library that provides the foundational utilities and abstractions for other libraries in the ecosystem",
    "main": "dist/index.js",
    "triggerDeployment": 3,

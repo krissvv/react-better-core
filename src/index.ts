@@ -6,6 +6,8 @@ import BetterCoreProvider, {
    type BetterCoreInternalConfig,
 } from "./components/BetterCoreProvider";
 
+import { countries } from "./constants/countries";
+
 import {
    type OmitProps,
    type ExcludeOptions,
@@ -51,6 +53,7 @@ export {
    BetterCoreInternalConfig,
 
    // Constants
+   countries,
 
    // Types
    OmitProps,
