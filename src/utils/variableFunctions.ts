@@ -1,5 +1,6 @@
 import { AnyOtherString } from "../types/app";
 import { LoaderName } from "../types/loader";
+import { ColorTheme } from "../types/theme";
 
 import { BetterCoreInternalConfig, externalBetterCoreContextValue } from "../components/BetterCoreProvider";
 
@@ -32,6 +33,20 @@ export const loaderControls = {
          ...oldValue,
          [loaderName.toString()]: false,
       }));
+   },
+};
+
+export const colorThemeControls = {
+   toggleTheme: (theme?: ColorTheme) => {
+      if (!checkBetterCoreContextValue(externalBetterCoreContextValue, "colorThemeControls.toggleTheme")) return;
+
+      const currentColorTheme = externalBetterCoreContextValue.colorTheme;
+      const newColorTheme = theme ?? (currentColorTheme === "dark" ? "light" : "dark");
+
+      setTimeout(() => {
+         window.document.body.parentElement?.setAttribute("data-theme", newColorTheme);
+         localStorage.setItem("theme", newColorTheme);
+      }, 0.01 * 1000);
    },
 };
 
