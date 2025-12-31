@@ -3,7 +3,7 @@ import BetterCoreProvider, {
    useTheme,
    useLoader,
    useLoaderControls,
-   type BetterCoreInternalConfig,
+   type BetterCoreProviderConfig,
 } from "./components/BetterCoreProvider";
 
 import { countries } from "./constants/countries";
@@ -50,7 +50,7 @@ export {
    useTheme,
    useLoader,
    useLoaderControls,
-   BetterCoreInternalConfig,
+   BetterCoreProviderConfig,
 
    // Constants
    countries,

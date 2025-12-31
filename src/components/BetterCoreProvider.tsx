@@ -14,13 +14,10 @@ export type BetterCoreInternalConfig = BetterCoreConfig & {
    setLoaders: React.Dispatch<React.SetStateAction<Partial<LoaderConfig>>>;
 };
 
-export type BetterCoreProviderConfig = DeepPartialRecord<BetterCoreConfig>;
-
 const betterCoreContext = createContext<BetterCoreInternalConfig | undefined>(undefined);
-
 export let externalBetterCoreContextValue: BetterCoreInternalConfig | undefined;
 
-export const useBetterCoreContext = (): BetterCoreConfig => {
+export const useBetterCoreContext = (): BetterCoreInternalConfig => {
    const context = useContext(betterCoreContext);
 
    if (context === undefined)
@@ -82,6 +79,8 @@ export const useLoaderControls = () => {
       stopLoading,
    };
 };
+
+export type BetterCoreProviderConfig = DeepPartialRecord<BetterCoreConfig>;
 
 type BetterCoreProviderProps = {
    config?: BetterCoreProviderConfig;

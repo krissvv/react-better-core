@@ -8,7 +8,7 @@ export type IconName =
    | "infoI"
    | "warningTriangle";
 
-export type IconData = {
+type IconData = {
    width: number;
    height: number;
    paths: (React.ComponentProps<"path"> & { type: "fill" | "stroke" })[];
