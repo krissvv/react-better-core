@@ -42,7 +42,7 @@ import {
    getPluralWord,
 } from "./utils/functions";
 import { useBooleanState, useDebounceState } from "./utils/hooks";
-import { loaderControls, colorThemeControls, filterHover } from "./utils/variableFunctions";
+import { loaderControls, colorThemeControls } from "./utils/variableFunctions";
 
 export {
    BetterCoreProvider,
@@ -100,5 +100,4 @@ export {
    // Variable Functions
    loaderControls,
    colorThemeControls,
-   filterHover,
 };

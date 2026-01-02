@@ -49,14 +49,3 @@ export const colorThemeControls = {
       }, 0.01 * 1000);
    },
 };
-
-export const filterHover = (): Record<"z05" | "z1" | "z2" | "z3", React.CSSProperties["filter"]> => {
-   if (!checkBetterCoreContextValue(externalBetterCoreContextValue, "filterHover")) return undefined as any;
-
-   return {
-      z05: externalBetterCoreContextValue.colorTheme === "dark" ? "brightness(1.2)" : "brightness(0.95)",
-      z1: externalBetterCoreContextValue.colorTheme === "dark" ? "brightness(1.3)" : "brightness(0.9)",
-      z2: externalBetterCoreContextValue.colorTheme === "dark" ? "brightness(1.6)" : "brightness(0.8)",
-      z3: externalBetterCoreContextValue.colorTheme === "dark" ? "brightness(1.9)" : "brightness(0.7)",
-   };
-};

@@ -1,8 +1,10 @@
 {
    "name": "react-better-core",
-   "version": "1.0.5",
+   "version": "1.0.6",
    "description": "The Core library that provides the foundational utilities and abstractions for other libraries in the ecosystem",
    "main": "dist/index.js",
+   "module": "dist/index.mjs",
+   "types": "dist/index.d.ts",
    "triggerDeployment": 3,
    "files": [
       "dist"
@@ -10,7 +12,9 @@
    "exports": {
       ".": {
          "types": "./dist/index.d.ts",
-         "default": "./dist/index.js"
+         "import": "./dist/index.mjs",
+         "require": "./dist/index.js",
+         "default": "./dist/index.mjs"
       }
    },
    "repository": {
