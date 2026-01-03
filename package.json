@@ -21,7 +21,6 @@
       "type": "git",
       "url": "git+https://github.com/krissvv/react-better-core.git"
    },
-   "homepage": "https://krissvv.github.io/react-better-core",
    "bugs": {
       "url": "https://github.com/krissvv/react-better-core/issues"
    },
