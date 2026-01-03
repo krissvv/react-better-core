@@ -1,6 +1,6 @@
 {
    "name": "react-better-core",
-   "version": "1.0.7",
+   "version": "1.0.8",
    "description": "The Core library that provides the foundational utilities and abstractions for other libraries in the ecosystem",
    "main": "dist/index.js",
    "module": "dist/index.mjs",

@@ -17,7 +17,7 @@ export type BetterCoreInternalConfig = BetterCoreConfig & {
 const betterCoreContext = createContext<BetterCoreInternalConfig | undefined>(undefined);
 export let externalBetterCoreContextValue: BetterCoreInternalConfig | undefined;
 
-export const useBetterCoreContext = (): BetterCoreInternalConfig => {
+export const useBetterCoreContext = (): BetterCoreConfig => {
    const context = useContext(betterCoreContext);
 
    if (context === undefined)
@@ -25,7 +25,9 @@ export const useBetterCoreContext = (): BetterCoreInternalConfig => {
          "`useBetterCoreContext()` must be used within a `<BetterCoreProvider>`. Make sure to add one at the root of your component tree.",
       );
 
-   return context;
+   const { setColorTheme, setLoaders, ...rest } = context;
+
+   return rest;
 };
 
 export const useTheme = () => {
