@@ -43,9 +43,6 @@ export const colorThemeControls = {
       const currentColorTheme = externalBetterCoreContextValue.colorTheme;
       const newColorTheme = theme ?? (currentColorTheme === "dark" ? "light" : "dark");
 
-      setTimeout(() => {
-         window.document.body.parentElement?.setAttribute("data-theme", newColorTheme);
-         localStorage.setItem("theme", newColorTheme);
-      }, 0.01 * 1000);
+      externalBetterCoreContextValue.setColorTheme(newColorTheme);
    },
 };
