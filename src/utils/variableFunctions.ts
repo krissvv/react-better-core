@@ -34,6 +34,14 @@ export const loaderControls = {
          [loaderName.toString()]: false,
       }));
    },
+   toggleLoading: (loaderName: LoaderName | AnyOtherString) => {
+      if (!checkBetterCoreContextValue(externalBetterCoreContextValue, "loaderControls.toggleLoading")) return;
+
+      externalBetterCoreContextValue.setLoaders((oldValue) => ({
+         ...oldValue,
+         [loaderName.toString()]: !(oldValue[loaderName.toString()] ?? false),
+      }));
+   },
 };
 
 export const colorThemeControls = {

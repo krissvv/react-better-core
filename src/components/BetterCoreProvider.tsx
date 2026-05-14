@@ -52,7 +52,7 @@ export const useLoader = (loaderName?: LoaderName | AnyOtherString): boolean => 
          "`useLoader()` must be used within a `<BetterCoreProvider>`. Make sure to add one at the root of your component tree.",
       );
 
-   return loaderName ? context.loaders[loaderName.toString()] ?? false : false;
+   return loaderName ? (context.loaders[loaderName.toString()] ?? false) : false;
 };
 
 export const useLoaderControls = () => {
@@ -75,10 +75,17 @@ export const useLoaderControls = () => {
          [loaderName.toString()]: false,
       }));
    }, []);
+   const toggleLoading = useCallback((loaderName: LoaderName | AnyOtherString) => {
+      context.setLoaders((oldValue) => ({
+         ...oldValue,
+         [loaderName.toString()]: !(oldValue[loaderName.toString()] ?? false),
+      }));
+   }, []);
 
    return {
       startLoading,
       stopLoading,
+      toggleLoading,
    };
 };
 
