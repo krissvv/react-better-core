@@ -16,6 +16,7 @@ import {
    type DeepPartialRecord,
    type PickAllRequired,
    type AnyOtherString,
+   type Unsubscribe,
 } from "./types/app";
 import { type AssetName, type AssetsConfig } from "./types/asset";
 import { type BetterCoreConfig } from "./types/config";
@@ -63,6 +64,7 @@ export {
    DeepPartialRecord,
    PickAllRequired,
    AnyOtherString,
+   Unsubscribe,
    AssetName,
    AssetsConfig,
    BetterCoreConfig,

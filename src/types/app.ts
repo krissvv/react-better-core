@@ -15,7 +15,10 @@ export type DeepPartialRecord<T> = {
    [K in keyof T]?: T[K] extends object ? DeepPartialRecord<T[K]> : T[K];
 };
 
-/** returns only the required props */
+/** Returns only the required props */
 export type PickAllRequired<T, K extends keyof T> = Required<Pick<T, K>>;
 
 export type AnyOtherString = Omit<string & {}, "">;
+
+/** Returns a function that will be used to unsubscribe from a listener or ongoing event */
+export type Unsubscribe = () => void;
