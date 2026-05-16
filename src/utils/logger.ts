@@ -49,7 +49,7 @@ function getCssString(options: Options): string {
 }
 
 function logText(text?: string, options?: Options): void {
-   if (externalBetterCoreContextValue?.devMode !== true) return;
+   if (!externalBetterCoreContextValue?.devMode) return;
 
    console.log(`%c${text}`, getCssString(options ?? {}));
 }
@@ -82,7 +82,7 @@ export const log = {
       });
    },
    trace: () => {
-      if (externalBetterCoreContextValue?.devMode !== true) return;
+      if (!externalBetterCoreContextValue?.devMode) return;
 
       console.trace();
    },

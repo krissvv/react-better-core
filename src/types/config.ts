@@ -9,5 +9,5 @@ export type BetterCoreConfig = {
    icons: Partial<IconsConfig>;
    assets: Partial<AssetsConfig>;
    loaders: Partial<LoaderConfig>;
-   devMode?: boolean;
+   devMode: boolean;
 };
