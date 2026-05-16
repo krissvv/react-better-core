@@ -1,7 +1,7 @@
 import { API, APIConfigItem, APIResponse } from "../types/api";
 import { HttpHeaders, HttpMethod } from "../types/http";
 
-import { constructQuery } from "./functions";
+import { constructQuery, objectToFormData } from "./functions";
 import { log } from "./logger";
 
 const methodInitiateToString: Record<HttpMethod, string> = {
@@ -65,7 +65,11 @@ export function generateApi<
       const url = `${baseURL}${path}${query ? `?${query}` : ""}`;
 
       const requestHeaders: HttpHeaders = {
-         "Content-Type": apiConfig[name].bodyWithFormData ? "multipart/form-data" : "application/json",
+         ...(!apiConfig[name].bodyWithFormData
+            ? {
+                 "Content-Type": "application/json",
+              }
+            : {}),
          ...(getHeaders
             ? Object.entries(getHeaders).reduce<HttpHeaders>((previousValue, [key, value]) => {
                  if (apiConfig[name].includeHeaders?.includes(key as keyof HttpHeaders)) {
@@ -78,15 +82,7 @@ export function generateApi<
       };
 
       const body = payload.body;
-      const bodyAsFormData = new FormData();
-
-      if (body && apiConfig[name].bodyWithFormData) {
-         Object.entries(body).forEach(([key, value]) => {
-            bodyAsFormData.append(key, value as string | Blob);
-         });
-      }
-
-      const readyBody = JSON.stringify((apiConfig[name].bodyWithFormData ? bodyAsFormData : body) ?? {});
+      const readyBody = apiConfig[name].bodyWithFormData && body ? objectToFormData(body) : JSON.stringify(body ?? {});
 
       log.log(`Initiate ${methodInitiateToString[apiConfig[name].method]} ${url} - ${name.toString()}`, {
          color: "magenta",

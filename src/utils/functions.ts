@@ -116,3 +116,29 @@ export const constructQuery = (query?: UrlQuery): string => {
       .flat()
       .join("&");
 };
+
+export function objectToFormData<ObjectType>(
+   object: ObjectType,
+   formData: FormData = new FormData(),
+   parentKey: string = "",
+): FormData {
+   if (object && typeof object === "object") {
+      if (object instanceof File) {
+         formData.append(parentKey, object);
+      } else if (Array.isArray(object)) {
+         object.forEach((value, index) => {
+            objectToFormData(value, formData, `${parentKey}[${index}]`);
+         });
+      } else {
+         Object.entries(object).forEach(([key, value]) => {
+            objectToFormData(value, formData, parentKey ? `${parentKey}[${key}]` : key);
+         });
+      }
+   } else {
+      if (object !== undefined && object !== null) {
+         formData.append(parentKey, object.toString());
+      }
+   }
+
+   return formData;
+}
