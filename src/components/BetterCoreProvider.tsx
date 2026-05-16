@@ -6,7 +6,7 @@ import { assets } from "../constants/assets";
 
 import { BetterCoreConfig } from "../types/config";
 import { AnyOtherString, DeepPartialRecord } from "../types/app";
-import { ColorTheme } from "../types/theme";
+import { Colors, ColorTheme } from "../types/theme";
 import { LoaderConfig, LoaderName } from "../types/loader";
 
 export type BetterCoreInternalConfig = BetterCoreConfig & {
@@ -38,9 +38,15 @@ export const useTheme = () => {
          "`useTheme()` must be used within a `<BetterCoreProvider>`. Make sure to add one at the root of your component tree.",
       );
 
+   const colors = context.theme.colors[context.colorTheme] ?? context.theme.colors.light;
+
    return {
       ...context.theme,
-      colors: context.theme.colors[context.colorTheme] ?? context.theme.colors.light,
+      colors: Object.entries(colors).reduce((previousValue, [key, value]) => {
+         previousValue[key] = value ?? context.theme.colors.light[key] ?? context.theme.colors.dark[key] ?? "#000000";
+
+         return previousValue;
+      }, {} as Colors),
    };
 };
 
@@ -111,11 +117,11 @@ function BetterCoreProvider({ config, children }: BetterCoreProviderProps) {
                light: {
                   ...theme.colors.light,
                   ...config?.theme?.colors?.light,
-               },
+               } as Colors,
                dark: {
                   ...theme.colors.dark,
                   ...config?.theme?.colors?.dark,
-               },
+               } as Colors,
             },
          },
          colorTheme,

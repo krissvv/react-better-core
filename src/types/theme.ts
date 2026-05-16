@@ -1,3 +1,5 @@
+import { AnyOtherString } from "./app";
+
 export type Color = `#${string}` | "transparent";
 export type ColorName =
    | "textPrimary"
@@ -15,7 +17,8 @@ export type ColorName =
    | "backgroundBase"
    | "backgroundSecondary"
    | "backgroundContent"
-   | "border";
+   | "border"
+   | AnyOtherString;
 export type ColorTheme = "light" | "dark";
 
 export type Styles = {

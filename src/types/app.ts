@@ -18,7 +18,7 @@ export type DeepPartialRecord<T> = {
 /** Returns only the required props */
 export type PickAllRequired<T, K extends keyof T> = Required<Pick<T, K>>;
 
-export type AnyOtherString = Omit<string & {}, "">;
+export type AnyOtherString = string & {};
 
 /** Returns a function that will be used to unsubscribe from a listener or ongoing event */
 export type Unsubscribe = () => void;
