@@ -110,9 +110,12 @@ export function generateApi<
             }
 
             if (!response.ok) {
-               log.log(`Response ${methodResponseToString[apiConfig[name].method]} ${url} - ${name.toString()}`, {
-                  color: "red",
-               });
+               log.log(
+                  `Failed   ${methodResponseToString[apiConfig[name].method]} request to ${url} with status code: ${response.status} - ${name.toString()}`,
+                  {
+                     color: "red",
+                  },
+               );
 
                throw {
                   data: responseJson,
