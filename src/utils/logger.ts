@@ -75,7 +75,7 @@ export const log = {
    json: (jsonObject?: any, options?: Options) => {
       logText(`\n${JSON.stringify(jsonObject, null, 4)}`, options);
    },
-   /** @description Logs a -=-= pattern */
+   /** @description Logs a "-=-=" pattern */
    divider: (color?: TextColor) => {
       logText("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-", {
          color,
