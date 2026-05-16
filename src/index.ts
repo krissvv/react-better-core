@@ -23,6 +23,8 @@ import { type BetterCoreConfig } from "./types/config";
 import { type Country } from "./types/countries";
 import { type IconName, type IconsConfig } from "./types/icon";
 import { type LoaderName, type LoaderConfig } from "./types/loader";
+import { type API, type APIConfigItem, type APIResponse, type UrlQuery } from "./types/api";
+import { type HttpHeaders, type HttpMethod } from "./types/http";
 import {
    type Color,
    type ColorName,
@@ -44,6 +46,8 @@ import {
 } from "./utils/functions";
 import { useBooleanState, useDebounceState } from "./utils/hooks";
 import { loaderControls, colorThemeControls } from "./utils/variableFunctions";
+import { generateApi } from "./utils/api";
+import { generateEventEmitter } from "./utils/eventEmitter";
 
 export {
    BetterCoreProvider,
@@ -73,6 +77,12 @@ export {
    IconsConfig,
    LoaderName,
    LoaderConfig,
+   API,
+   APIConfigItem,
+   APIResponse,
+   UrlQuery,
+   HttpHeaders,
+   HttpMethod,
    Color,
    ColorName,
    ColorTheme,
@@ -102,4 +112,10 @@ export {
    // Variable Functions
    loaderControls,
    colorThemeControls,
+
+   // API
+   generateApi,
+
+   // Event Emitter
+   generateEventEmitter,
 };

@@ -1,5 +1,7 @@
 import { countries } from "../constants/countries";
 
+import { UrlQuery } from "../types/api";
+
 export const generateRandomString = (
    stringLength: number,
    options?: {
@@ -99,4 +101,18 @@ export const getPluralWord = (word: string, count: number): string => {
    const pluralWord = needChangeY ? word.slice(0, -1) + "ies" : word.slice(-1) === "s" ? word + "es" : word + "s";
 
    return pluralWord;
+};
+
+export const constructQuery = (query?: UrlQuery): string => {
+   if (!query) return "";
+
+   return Object.entries(query)
+      .filter(([_, queryVale]) => queryVale !== undefined && queryVale !== null)
+      .map(([queryName, queryVale]) =>
+         typeof queryVale === "object"
+            ? queryVale.map((value) => `${queryName}=${value}`)
+            : [`${queryName}=${queryVale}`],
+      )
+      .flat()
+      .join("&");
 };

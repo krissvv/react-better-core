@@ -21,6 +21,7 @@ export type ColorTheme = "light" | "dark";
 export type Styles = {
    space: number;
    gap: number;
+   borderWidth: number;
    borderRadius: number;
    fontFamily: string;
    transition: string;

@@ -4,6 +4,7 @@ export const theme: ThemeConfig = {
    styles: {
       space: 16,
       gap: 8,
+      borderWidth: 1,
       borderRadius: 10,
       fontFamily: "Arial, sans-serif",
       transition: "ease 0.2s",

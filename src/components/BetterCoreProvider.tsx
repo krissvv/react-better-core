@@ -130,6 +130,7 @@ function BetterCoreProvider({ config, children }: BetterCoreProviderProps) {
          },
          loaders,
          setLoaders,
+         devMode: config?.devMode ?? false,
       }),
       [config, colorTheme, loaders],
    );
