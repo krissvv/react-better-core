@@ -1,3 +1,5 @@
+import { externalBetterCoreContextValue } from "../components/BetterCoreProvider";
+
 type LogType = "info" | "success" | "warn" | "error";
 type TextColor = keyof typeof textColors;
 type BackgroundColor = keyof typeof backgroundColors;
@@ -47,19 +49,24 @@ function getCssString(options: Options): string {
 }
 
 function logText(text?: string, options?: Options): void {
+   if (externalBetterCoreContextValue?.devMode !== true) return;
+
    console.log(`%c${text}`, getCssString(options ?? {}));
 }
 
 export const log = {
-   ...Object.entries(logTypes).reduce((previousValue, [logType, color]) => {
-      previousValue[logType as LogType] = (text = "", bold?: boolean) => {
-         logText(text, {
-            color,
-            bold,
-         });
-      };
-      return previousValue;
-   }, {} as Record<LogType, (text?: string, bold?: boolean) => void>),
+   ...Object.entries(logTypes).reduce(
+      (previousValue, [logType, color]) => {
+         previousValue[logType as LogType] = (text = "", bold?: boolean) => {
+            logText(text, {
+               color,
+               bold,
+            });
+         };
+         return previousValue;
+      },
+      {} as Record<LogType, (text?: string, bold?: boolean) => void>,
+   ),
    /** @description Default log function */
    log: (text?: string, options?: Options) => {
       logText(text, options);
@@ -75,6 +82,8 @@ export const log = {
       });
    },
    trace: () => {
+      if (externalBetterCoreContextValue?.devMode !== true) return;
+
       console.trace();
    },
 };
