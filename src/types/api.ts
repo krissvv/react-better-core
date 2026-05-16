@@ -19,7 +19,7 @@ export type APIConfigItem = {
 
 export type UrlQuery = Record<string, string | number | boolean | (string | number)[]>;
 
-export type APIResponse<Data> = {
+export type APIResponse<Data = any> = {
    data: Data;
    headers: Headers;
    statusCode: number;
@@ -27,4 +27,14 @@ export type APIResponse<Data> = {
    url: string;
    ok: boolean;
    redirected: boolean;
+};
+
+export type APIError<Data = any> = {
+   data: Data;
+   headers?: Headers;
+   statusCode?: number;
+   statusText?: string;
+   url?: string;
+   ok: false;
+   redirected?: boolean;
 };

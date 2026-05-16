@@ -1,4 +1,4 @@
-import { API, APIConfigItem, APIResponse } from "../types/api";
+import { API, APIConfigItem, APIError, APIResponse } from "../types/api";
 import { HttpHeaders, HttpMethod } from "../types/http";
 
 import { constructQuery, objectToFormData } from "./functions";
@@ -98,23 +98,62 @@ export function generateApi<
 
       async function call(
          callAction: () => Promise<Response>,
-      ): Promise<APIResponse<Promise<APIConfig[EndpointName]["response"]>>> {
-         const response = await callAction();
-         const responseJson = await response.json();
+      ): Promise<APIResponse<APIConfig[EndpointName]["response"]>> {
+         try {
+            const response = await callAction();
+            let responseJson;
 
-         log.log(`Response ${methodResponseToString[apiConfig[name].method]} ${url} - ${name.toString()}`, {
-            color: "blue",
-         });
+            try {
+               responseJson = await response.json();
+            } catch {
+               responseJson = undefined;
+            }
 
-         return {
-            data: responseJson,
-            headers: response.headers,
-            statusCode: response.status,
-            statusText: response.statusText,
-            url: response.url,
-            ok: response.ok,
-            redirected: response.redirected,
-         };
+            if (!response.ok) {
+               log.log(`Response ${methodResponseToString[apiConfig[name].method]} ${url} - ${name.toString()}`, {
+                  color: "red",
+               });
+
+               throw {
+                  data: responseJson,
+                  headers: response.headers,
+                  statusCode: response.status,
+                  statusText: response.statusText,
+                  url: response.url,
+                  ok: false,
+                  redirected: response.redirected,
+               } as APIError;
+            }
+
+            log.log(`Response ${methodResponseToString[apiConfig[name].method]} ${url} - ${name.toString()}`, {
+               color: "blue",
+            });
+
+            return {
+               data: responseJson,
+               headers: response.headers,
+               statusCode: response.status,
+               statusText: response.statusText,
+               url: response.url,
+               ok: response.ok,
+               redirected: response.redirected,
+            };
+         } catch (error) {
+            if (isApiError(error)) throw error;
+
+            log.log(`Error    ${methodResponseToString[apiConfig[name].method]} ${url} - ${name.toString()}`, {
+               color: "red",
+            });
+
+            throw {
+               data: error,
+               ok: false,
+            } as APIError;
+         }
       }
    };
+}
+
+export function isApiError<Data = any>(error: unknown): error is APIError<Data> {
+   return typeof error === "object" && error !== null && "ok" in error && error.ok === false && "data" in error;
 }
