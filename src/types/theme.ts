@@ -28,6 +28,7 @@ export type Styles = {
    borderRadius: number;
    fontFamily: string;
    transition: string;
+   [key: AnyOtherString]: any;
 };
 export type Colors = Record<ColorName, Color>;
 

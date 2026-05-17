@@ -35,7 +35,13 @@ import {
    type ThemeConfig,
 } from "./types/theme";
 
-import { lightenColor, darkenColor, saturateColor, desaturateColor } from "./utils/colorManipulation";
+import {
+   lightenColor,
+   darkenColor,
+   saturateColor,
+   desaturateColor,
+   calculateColorContrast,
+} from "./utils/colorManipulation";
 import {
    generateRandomString,
    formatPhoneNumber,
@@ -98,6 +104,7 @@ export {
    darkenColor,
    saturateColor,
    desaturateColor,
+   calculateColorContrast,
 
    // Functions
    generateRandomString,

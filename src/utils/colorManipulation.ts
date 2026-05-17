@@ -161,3 +161,76 @@ export const desaturateColor = (hexColor: string, amount: number): string => {
 
    return `#${rHex}${gHex}${bHex}`;
 };
+
+/**
+ * @returns The contrast ratio between the two colors. Returns a number between 1 and 21.
+ */
+export const calculateColorContrast = (firstColor: string, secondColor: string): number => {
+   const firstRgb = parseColorToRgb(firstColor);
+   const secondRgb = parseColorToRgb(secondColor);
+
+   const firstLuminance = calculateRelativeLuminance(firstRgb);
+   const secondLuminance = calculateRelativeLuminance(secondRgb);
+
+   const lighterLuminance = Math.max(firstLuminance, secondLuminance);
+   const darkerLuminance = Math.min(firstLuminance, secondLuminance);
+
+   return (lighterLuminance + 0.05) / (darkerLuminance + 0.05);
+
+   function parseColorToRgb(color: string): { red: number; green: number; blue: number } {
+      const readyColor = color.trim().toLowerCase();
+
+      const rgbMatch = readyColor.match(
+         /^rgb\(\s*(?<red>\d{1,3})\s*,\s*(?<green>\d{1,3})\s*,\s*(?<blue>\d{1,3})\s*\)$/,
+      );
+      if (rgbMatch?.groups) {
+         const red = Number(rgbMatch.groups.red);
+         const green = Number(rgbMatch.groups.green);
+         const blue = Number(rgbMatch.groups.blue);
+
+         if ([red, green, blue].some((channel) => Number.isNaN(channel) || channel < 0 || channel > 255)) {
+            throw new Error(`Invalid rgb() color: ${color}`);
+         }
+
+         return { red, green, blue };
+      }
+
+      const hexMatch = readyColor.match(/^#?(?<hex>[0-9a-f]{3}|[0-9a-f]{6})$/);
+      if (!hexMatch?.groups?.hex) {
+         throw new Error(`Unsupported color format: ${color}`);
+      }
+
+      const hex =
+         hexMatch.groups.hex.length === 3
+            ? hexMatch.groups.hex
+                 .split("")
+                 .map((c) => c + c)
+                 .join("")
+            : hexMatch.groups.hex;
+
+      const red = Number.parseInt(hex.slice(0, 2), 16);
+      const green = Number.parseInt(hex.slice(2, 4), 16);
+      const blue = Number.parseInt(hex.slice(4, 6), 16);
+
+      return {
+         red,
+         green,
+         blue,
+      };
+   }
+
+   function calculateRelativeLuminance(color: { red: number; green: number; blue: number }): number {
+      const toLinearChannel = (channel: number): number => {
+         const normalizedChannel = channel / 255;
+         return normalizedChannel <= 0.03928
+            ? normalizedChannel / 12.92
+            : Math.pow((normalizedChannel + 0.055) / 1.055, 2.4);
+      };
+
+      const red = toLinearChannel(color.red);
+      const green = toLinearChannel(color.green);
+      const blue = toLinearChannel(color.blue);
+
+      return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+   }
+};
