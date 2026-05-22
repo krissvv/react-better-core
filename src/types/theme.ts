@@ -27,6 +27,7 @@ export type Styles = {
    borderWidth: number;
    borderRadius: number;
    fontFamily: string;
+   fontSize: number;
    transition: string;
    [key: AnyOtherString]: any;
 };

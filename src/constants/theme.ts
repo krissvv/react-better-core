@@ -7,6 +7,7 @@ export const theme: ThemeConfig = {
       borderWidth: 1,
       borderRadius: 10,
       fontFamily: "Arial, sans-serif",
+      fontSize: 16,
       transition: "ease 0.2s",
    },
    colors: {
