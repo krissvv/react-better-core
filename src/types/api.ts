@@ -6,6 +6,7 @@ export type API<APIConfig> = Record<
       method: HttpMethod;
       path: `/${string}`;
       bodyWithFormData?: boolean;
+      responseIsOctetStream?: boolean;
       includeHeaders?: (keyof HttpHeaders)[];
    }
 >;

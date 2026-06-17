@@ -65,7 +65,7 @@ export function generateApi<
       const url = `${baseURL}${path}${query ? `?${query}` : ""}`;
 
       const requestHeaders: HttpHeaders = {
-         ...(!apiConfig[name].bodyWithFormData
+         ...(!apiConfig[name].bodyWithFormData && !apiConfig[name].responseIsOctetStream
             ? {
                  "Content-Type": "application/json",
               }
@@ -104,7 +104,7 @@ export function generateApi<
             let responseJson;
 
             try {
-               responseJson = await response.json();
+               responseJson = apiConfig[name].responseIsOctetStream ? await response.blob() : await response.json();
             } catch {
                responseJson = undefined;
             }
