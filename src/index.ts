@@ -23,7 +23,14 @@ import { type BetterCoreConfig } from "./types/config";
 import { type Country } from "./types/countries";
 import { type IconName, type IconsConfig } from "./types/icon";
 import { type LoaderName, type LoaderConfig } from "./types/loader";
-import { type API, type APIConfigItem, type APIError, type APIResponse, type UrlQuery } from "./types/api";
+import {
+   type API,
+   type APIEndpointConfig,
+   type APIConfigItem,
+   type APIError,
+   type APIResponse,
+   type UrlQuery,
+} from "./types/api";
 import { type HttpHeaders, type HttpMethod } from "./types/http";
 import {
    type Color,
@@ -85,6 +92,7 @@ export {
    LoaderName,
    LoaderConfig,
    API,
+   APIEndpointConfig,
    APIConfigItem,
    APIError,
    APIResponse,
