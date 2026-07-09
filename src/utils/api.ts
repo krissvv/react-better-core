@@ -53,6 +53,7 @@ export function generateApi<
          query?: APIConfig[EndpointName]["query"];
          body?: APIConfig[EndpointName]["body"];
          path?: APIConfig[EndpointName]["path"];
+         headers?: HttpHeaders;
       } = {},
    ): Promise<APIResponse<APIConfig[EndpointName]["response"]>> {
       const endpointConfig = apiConfig[name];
@@ -87,6 +88,7 @@ export function generateApi<
             : {}),
          ...options.getAdditionalHeaders?.(endpointConfig),
          ...endpointConfig.headers,
+         ...payload.headers,
       };
 
       const body = payload.body;
