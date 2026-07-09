@@ -1,4 +1,5 @@
-import { API, APIConfigItem, APIError, APIResponse } from "../types/api";
+import { API, APIConfigItem, APIEndpointConfig, APIError, APIResponse } from "../types/api";
+import { AnyOtherString } from "../types/app";
 import { HttpHeaders, HttpMethod } from "../types/http";
 
 import { constructQuery, objectToFormData } from "./functions";
@@ -32,16 +33,19 @@ export function generateApi<
    APIConfig extends Record<string, APIConfigItem>,
    APIHeaders extends HttpHeaders = HttpHeaders,
 >(
-   config: {
+   options: {
       /**
        * Do not add a trailing slash
        */
       baseUrl: string;
+      getHeaders?: {
+         [HeaderName in keyof APIHeaders | AnyOtherString]?: () => HeaderName extends keyof APIHeaders
+            ? APIHeaders[HeaderName]
+            : string;
+      };
+      getAdditionalHeaders?: (endpointConfig: APIEndpointConfig) => Record<string, string>;
    },
    apiConfig: API<APIConfig>,
-   getHeaders?: {
-      [HeaderName in keyof APIHeaders]?: () => APIHeaders[HeaderName];
-   },
 ) {
    return async function apiCall<EndpointName extends keyof APIConfig>(
       name: EndpointName,
@@ -51,7 +55,9 @@ export function generateApi<
          path?: APIConfig[EndpointName]["path"];
       } = {},
    ): Promise<APIResponse<APIConfig[EndpointName]["response"]>> {
-      if (!apiConfig[name]) {
+      const endpointConfig = apiConfig[name];
+
+      if (!endpointConfig) {
          return Promise.reject(
             new Error(`Endpoint ${name.toString()} is not defined in the \`generateApi\` function.`, {
                cause: "generateApi.apiConfig.missingEndpoint",
@@ -59,39 +65,41 @@ export function generateApi<
          );
       }
 
-      const baseURL = config.baseUrl;
-      const path = `${apiConfig[name].path}${payload.path?.length ? `/${payload.path.join("/")}` : ""}`;
+      const baseURL = options.baseUrl;
+      const path = `${endpointConfig.path}${payload.path?.length ? `/${payload.path.join("/")}` : ""}`;
       const query = constructQuery(payload.query);
       const url = `${baseURL}${path}${query ? `?${query}` : ""}`;
 
       const requestHeaders: HttpHeaders = {
-         ...(!apiConfig[name].bodyWithFormData && !apiConfig[name].responseIsOctetStream
+         ...(!endpointConfig.bodyWithFormData && !endpointConfig.responseIsOctetStream
             ? {
                  "Content-Type": "application/json",
               }
             : {}),
-         ...(getHeaders
-            ? Object.entries(getHeaders).reduce<HttpHeaders>((previousValue, [key, value]) => {
-                 if (apiConfig[name].includeHeaders?.includes(key as keyof HttpHeaders)) {
+         ...(options.getHeaders
+            ? Object.entries(options.getHeaders).reduce<HttpHeaders>((previousValue, [key, value]) => {
+                 if (endpointConfig.includeHeaders?.includes(key as keyof HttpHeaders)) {
                     previousValue[key as keyof HttpHeaders] = value?.();
                  }
 
                  return previousValue;
               }, {})
             : {}),
+         ...options.getAdditionalHeaders?.(endpointConfig),
+         ...endpointConfig.headers,
       };
 
       const body = payload.body;
-      const readyBody = apiConfig[name].bodyWithFormData && body ? objectToFormData(body) : JSON.stringify(body ?? {});
+      const readyBody = endpointConfig.bodyWithFormData && body ? objectToFormData(body) : JSON.stringify(body ?? {});
 
-      log.log(`Initiate ${methodInitiateToString[apiConfig[name].method]} ${url} - ${name.toString()}`, {
+      log.log(`Initiate ${methodInitiateToString[endpointConfig.method]} ${url} - ${name.toString()}`, {
          color: "magenta",
       });
 
       return await call(() =>
          fetch(url, {
-            method: apiConfig[name].method,
-            body: apiConfig[name].method !== "GET" ? readyBody : undefined,
+            method: endpointConfig.method,
+            body: endpointConfig.method !== "GET" ? readyBody : undefined,
             headers: requestHeaders as any,
          }),
       );
@@ -101,24 +109,24 @@ export function generateApi<
       ): Promise<APIResponse<APIConfig[EndpointName]["response"]>> {
          try {
             const response = await callAction();
-            let responseJson;
+            let parsedResponse;
 
             try {
-               responseJson = apiConfig[name].responseIsOctetStream ? await response.blob() : await response.json();
+               parsedResponse = endpointConfig.responseIsOctetStream ? await response.blob() : await response.json();
             } catch {
-               responseJson = undefined;
+               parsedResponse = undefined;
             }
 
             if (!response.ok) {
                log.log(
-                  `Failed   ${methodResponseToString[apiConfig[name].method]} request to ${url} with status code: ${response.status} - ${name.toString()}`,
+                  `Failed   ${methodResponseToString[endpointConfig.method]} request to ${url} with status code: ${response.status} - ${name.toString()}`,
                   {
                      color: "red",
                   },
                );
 
                throw {
-                  data: responseJson,
+                  data: parsedResponse,
                   headers: response.headers,
                   statusCode: response.status,
                   statusText: response.statusText,
@@ -128,12 +136,12 @@ export function generateApi<
                } as APIError;
             }
 
-            log.log(`Response ${methodResponseToString[apiConfig[name].method]} ${url} - ${name.toString()}`, {
+            log.log(`Response ${methodResponseToString[endpointConfig.method]} ${url} - ${name.toString()}`, {
                color: "blue",
             });
 
             return {
-               data: responseJson,
+               data: parsedResponse,
                headers: response.headers,
                statusCode: response.status,
                statusText: response.statusText,
@@ -144,7 +152,7 @@ export function generateApi<
          } catch (error) {
             if (isApiError(error)) throw error;
 
-            log.log(`Error    ${methodResponseToString[apiConfig[name].method]} ${url} - ${name.toString()}`, {
+            log.log(`Error    ${methodResponseToString[endpointConfig.method]} ${url} - ${name.toString()}`, {
                color: "red",
             });
 

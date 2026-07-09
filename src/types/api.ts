@@ -1,15 +1,17 @@
+import { AnyOtherString } from "./app";
 import { HttpHeaders, HttpMethod } from "./http";
 
-export type API<APIConfig> = Record<
-   keyof APIConfig,
-   {
-      method: HttpMethod;
-      path: `/${string}`;
-      bodyWithFormData?: boolean;
-      responseIsOctetStream?: boolean;
-      includeHeaders?: (keyof HttpHeaders)[];
-   }
->;
+export type API<APIConfig> = Record<keyof APIConfig, APIEndpointConfig>;
+
+export type APIEndpointConfig = {
+   method: HttpMethod;
+   path: `/${string}`;
+   bodyWithFormData?: boolean;
+   responseIsOctetStream?: boolean;
+   headers?: HttpHeaders;
+   includeHeaders?: (keyof HttpHeaders | AnyOtherString)[];
+   meta?: Record<string, any>;
+};
 
 export type APIConfigItem = {
    body: any;
