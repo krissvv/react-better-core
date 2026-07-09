@@ -39,11 +39,11 @@ export function generateApi<
        */
       baseUrl: string;
       getHeaders?: {
-         [HeaderName in keyof APIHeaders | AnyOtherString]?: () => HeaderName extends keyof APIHeaders
-            ? APIHeaders[HeaderName]
-            : string;
+         [HeaderName in keyof APIHeaders | AnyOtherString]?: () =>
+            | (HeaderName extends keyof APIHeaders ? APIHeaders[HeaderName] : string)
+            | undefined;
       };
-      getAdditionalHeaders?: (endpointConfig: APIEndpointConfig) => Record<string, string>;
+      getAdditionalHeaders?: (endpointConfig: APIEndpointConfig) => Record<string, string | undefined>;
    },
    apiConfig: API<APIConfig>,
 ) {
