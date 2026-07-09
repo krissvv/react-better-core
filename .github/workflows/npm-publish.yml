@@ -27,9 +27,6 @@ jobs:
               node-version: "24"
               registry-url: "https://registry.npmjs.org"
 
-         - name: Update npm
-           run: npm install -g npm@latest
-
          - name: Check version changes
            id: check
            run: |
