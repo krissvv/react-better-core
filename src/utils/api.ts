@@ -114,7 +114,11 @@ export function generateApi<
             let parsedResponse;
 
             try {
-               parsedResponse = endpointConfig.responseIsOctetStream ? await response.blob() : await response.json();
+               parsedResponse = endpointConfig.responseIsOctetStream
+                  ? await response.blob()
+                  : requestHeaders["Content-Type"] === "application/json"
+                    ? await response.json()
+                    : await response.text();
             } catch {
                parsedResponse = undefined;
             }
